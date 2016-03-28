@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 /**
@@ -112,8 +110,10 @@ public class Level2 {
         boolean cyclicGraph;
         if (negativeWeight) {
             cyclicGraph = DFS(g, topologicalOrder);
-            if (cyclicGraph)
+            if (cyclicGraph) {
                 BellmanFord(g);
+
+            }
             else {
                 DAGShortestPath(g, topologicalOrder);
                 numOfShortestPath(g);
@@ -229,6 +229,7 @@ public class Level2 {
         }
     }
 
+
     private static void printNegativeCycle(Graph g, Vertex u) {
 
     }
@@ -266,13 +267,13 @@ public class Level2 {
                 v.color = Vertex.Color.grey;
                 cycle = DFSVisit(v, topologicalOrder);
                 if (cycle)
-                    return cycle;
+                    return true;
             } else if (v.color == Vertex.Color.grey)
                 return true;
         }
         u.color = Vertex.Color.black;
         topologicalOrder.push(u);
-        return cycle;
+        return false;
     }
 
     /**
@@ -313,23 +314,5 @@ public class Level2 {
         return false;
     }
 
-    private static void printResult(Graph g, String method) {
-        int totalDistance = 0;
-        for (Vertex u : g) {
-            if (u.distance != Integer.MAX_VALUE)
-                totalDistance += u.distance;
-        }
-        System.out.println(method + " " + totalDistance);
-        if (g.numNodes <= 100) {
-            for (Vertex u : g) {
-                if (u.parent != null)
-                    System.out.println(u + " " + u.distance + " " + u.parent);
-                else if (u.distance != Integer.MAX_VALUE)
-                    System.out.println(u + " " + u.distance + " -");
-                else
-                    System.out.println(u + " INF -");
-            }
-        }
-    }
 
 }

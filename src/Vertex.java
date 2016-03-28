@@ -15,7 +15,7 @@ public class Vertex implements Index {
     public int index;
     public int count;
     public Color color;
-    enum Color {white, grey, black};
+    enum Color {white, grey, black}
 
     /**
      * Constructor for the vertex
