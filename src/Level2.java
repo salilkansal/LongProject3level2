@@ -31,41 +31,84 @@ public class Level2 {
         Graph g = Graph.readGraph(sc, true);
         shortestPath(g);
 
+        numOfShortestPath(g);
+
+    }
+
+    public static void numOfShortestPath(Graph g) {
         Graph shortestGraph = new Graph(g.numNodes);
 
-        g.forEach(vertex -> {
-            vertex.Adj.forEach(edge -> {
-                if (edge.From.distance + edge.Weight == edge.To.distance) {
-                    edge.isShortestPath = true;
-                    shortestGraph.addDirectedEdge(edge.From.name, edge.To.name, edge.Weight);
-                }
-            });
-        });
-        shortestGraph.forEach(vertex -> vertex.count = 0);
-
-        Queue<Vertex> queue = new LinkedList<>();
-
-        queue.add(shortestGraph.verts.get(1));
-        shortestGraph.verts.get(1).count = 1;
-
-        while (!queue.isEmpty()) {
-            Vertex u = queue.remove();
-            for(Edge e:u.Adj){
-                Vertex v = e.otherEnd(u);
-                v.count += u.count;
-                if(!queue.contains(v))
-                queue.add(v);
+        g.forEach(vertex -> vertex.Adj.forEach(edge -> {
+            if (edge.From.distance + edge.Weight == edge.To.distance) {
+                edge.isShortestPath = true;
+                shortestGraph.addDirectedEdge(edge.From.name, edge.To.name, edge.Weight);
             }
-        }
-
+        }));
+        shortestGraph.forEach(vertex -> {
+            vertex.count = 0;
+            vertex.seen = false;
+        });
         int count = 0;
 
-        for(Vertex u:shortestGraph){
-            count+=u.count;
+        for (Vertex u : shortestGraph) {
+            count += calcCount(u);
         }
 
-        System.out.println("count = " + count);
+        System.out.println(count);
+        printLevel2(g, shortestGraph);
+    }
 
+    private static void printLevel2(Graph g, Graph shortestGraph) {
+        if(shortestGraph.numNodes<=100) {
+            for (Vertex u : shortestGraph) {
+                Vertex v = g.verts.get(u.name);
+                if(v.parent!=null || v.distance!=Integer.MAX_VALUE){
+                    System.out.println(u + " " + v.distance + " " + u.count);
+                }
+                else
+                    System.out.println(u + " " + "INF" + " " + "0");
+
+            }
+        }
+    }
+
+    private static int calcCount(Vertex u) {
+        if (u.revAdj.size() == 0) {
+            u.count = 1;
+            return 1;
+        }
+        int count = 0;
+        for (Edge e : u.revAdj) {
+            Vertex v = e.otherEnd(u);
+            if (v.count == 0) {
+                count += calcCount(v);
+
+            }
+            else
+                count += v.count;
+        }
+        u.count = count;
+        return count;
+    }
+
+
+    private static LinkedList<Vertex> bfsorder(Graph shortestGraph) {
+        LinkedList<Vertex> bfsorder = new LinkedList<>();
+        Queue<Vertex> queue = new LinkedList<>();
+        queue.add(shortestGraph.verts.get(1));
+        shortestGraph.verts.get(1).seen = true;
+        while (!queue.isEmpty()) {
+            Vertex u = queue.remove();
+            bfsorder.add(u);
+            for (Edge e : u.Adj) {
+                Vertex neighbour = e.otherEnd(u);
+                if (!neighbour.seen) {
+                    neighbour.seen = true;
+                    queue.add(neighbour);
+                }
+            }
+        }
+        return bfsorder;
     }
 
 
@@ -126,7 +169,6 @@ public class Level2 {
                 }
             }
         }
-        printResult(g, "Dij");
     }
 
     /**
@@ -151,7 +193,6 @@ public class Level2 {
                 }
             }
         }
-        printResult(g, "BFS");
     }
 
     /**
@@ -169,7 +210,6 @@ public class Level2 {
                 relax(u, v, e);
             }
         }
-        printResult(g, "DAG");
     }
 
     /**
@@ -200,7 +240,6 @@ public class Level2 {
                 }
             }
         }
-        printResult(g, "B-F");
     }
 
     /**
