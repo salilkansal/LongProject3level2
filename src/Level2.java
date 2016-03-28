@@ -31,7 +31,7 @@ public class Level2 {
         Graph g = Graph.readGraph(sc, true);
         shortestPath(g);
 
-        numOfShortestPath(g);
+
 
     }
 
@@ -73,7 +73,7 @@ public class Level2 {
     }
 
     private static int calcCount(Vertex u) {
-        if (u.revAdj.size() == 0) {
+        if (u.name == 1) {
             u.count = 1;
             return 1;
         }
@@ -92,24 +92,6 @@ public class Level2 {
     }
 
 
-    private static LinkedList<Vertex> bfsorder(Graph shortestGraph) {
-        LinkedList<Vertex> bfsorder = new LinkedList<>();
-        Queue<Vertex> queue = new LinkedList<>();
-        queue.add(shortestGraph.verts.get(1));
-        shortestGraph.verts.get(1).seen = true;
-        while (!queue.isEmpty()) {
-            Vertex u = queue.remove();
-            bfsorder.add(u);
-            for (Edge e : u.Adj) {
-                Vertex neighbour = e.otherEnd(u);
-                if (!neighbour.seen) {
-                    neighbour.seen = true;
-                    queue.add(neighbour);
-                }
-            }
-        }
-        return bfsorder;
-    }
 
 
     public static void shortestPath(Graph g) {
@@ -134,15 +116,19 @@ public class Level2 {
                 BellmanFord(g);
             else {
                 DAGShortestPath(g, topologicalOrder);
+                numOfShortestPath(g);
             }
-        } else if (uniformWeight)
+        } else if (uniformWeight) {
             BFS(g);
+            numOfShortestPath(g);
+        }
         else {
             cyclicGraph = DFS(g, topologicalOrder);
             if (cyclicGraph)
                 Dijkstra(g);
             else
                 DAGShortestPath(g, topologicalOrder);
+            numOfShortestPath(g);
         }
     }
 
@@ -227,7 +213,8 @@ public class Level2 {
             u.seen = false;
             u.count++;
             if (u.count >= g.numNodes) {
-                System.out.println("Unable to solve problem. Graph has a negative cycle");
+                System.out.println("Non-positive cycle in graph. DAC is not applicable");
+                printNegativeCycle(g,u);
                 return;
             }
             for (Edge e : u.Adj) {
@@ -240,6 +227,10 @@ public class Level2 {
                 }
             }
         }
+    }
+
+    private static void printNegativeCycle(Graph g, Vertex u) {
+
     }
 
     /**
