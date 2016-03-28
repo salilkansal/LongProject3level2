@@ -5,10 +5,10 @@
  */
 
 public interface PQ<T> {
-    public void insert(T x);
-    public T deleteMin();
-    public T min();
-    public void add(T x);
-    public T remove();
-    public T peek();
+    void insert(T x);
+    T deleteMin();
+    T min();
+    void add(T x);
+    T remove();
+    T peek();
 }

@@ -207,13 +207,13 @@ public class Level1 {
                 v.color = Vertex.Color.grey;
                 cycle = DFSVisit(v, topologicalOrder);
                 if (cycle)
-                    return cycle;
+                    return true;
             } else if (v.color == Vertex.Color.grey)
                 return true;
         }
         u.color = Vertex.Color.black;
         topologicalOrder.push(u);
-        return cycle;
+        return false;
     }
 
     /**

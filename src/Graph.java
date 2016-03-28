@@ -72,19 +72,13 @@ class Graph implements Iterable<Vertex> {
 
     /**
      * A Custom Iterator Class for iterating through the vertices in a graph
-     *
-     *
-     * @param <Vertex>
+
      */
     private class VertexIterator implements Iterator<Vertex> {
         private Iterator<Vertex> it;
         /**
          * Constructor for VertexIterator
-         *
-         * @param v
-         *            : Array of vertices
-         * @param n
-         *            : int - Size of the graph
+
          */
         private VertexIterator() {
             it = verts.iterator();

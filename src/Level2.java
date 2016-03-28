@@ -259,7 +259,7 @@ public class Level2 {
      * False: Cycle is not detected
      */
     private static boolean DFSVisit(Vertex u, ArrayDeque<Vertex> topologicalOrder) {
-        boolean cycle = false;
+        boolean cycle;
         for (Edge e : u.Adj) {
             Vertex v = e.otherEnd(u);
             if (!v.seen) {
