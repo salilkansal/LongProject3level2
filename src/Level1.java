@@ -25,11 +25,21 @@ public class Level1 {
         if (args.length > 0)
             sc = new Scanner(new File(args[0]));
         else
-            sc = new Scanner(new File("sampleInput.txt"));
+            sc = new Scanner(System.in);
         Graph g = Graph.readGraph(sc, true);
         shortestPath(g);
     }
 
+    /**
+     * Function which uses different algorithms to find shortest path for different types of graphs
+     * If the graph-
+     * has uniform positive weights ->BFS
+     * is directed, acyclic graph (DAG) ->DAG shortest paths
+     * has only non-negative weights ->Dijkstra's algorithm
+     * If all these test fail, then ->Bellman-Ford algorithm
+     * has negative cycles, then it prints the message "Unable to solve problem. Graph has a negative cycle".
+     * @param g Directed graph
+     */
     public static void shortestPath(Graph g) {
         boolean negativeWeight = false;
         boolean uniformWeight = true;
@@ -244,6 +254,11 @@ public class Level1 {
         return false;
     }
 
+    /**
+     * Function to print according to the output specification
+     * @param g Directed graph
+     * @param method specifies which shortest path algorithm was used
+     */
     private static void printResult(Graph g, String method) {
         int totalDistance = 0;
         for (Vertex u : g) {
