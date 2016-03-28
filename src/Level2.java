@@ -27,7 +27,7 @@ public class Level2 {
         if (args.length > 0)
             sc = new Scanner(new File(args[0]));
         else
-            sc = new Scanner(new File("sampleInput.txt"));
+            sc = new Scanner(System.in);
         Graph g = Graph.readGraph(sc, true);
         shortestPath(g);
 
